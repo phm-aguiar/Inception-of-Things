@@ -15,6 +15,7 @@ Este projeto é uma introdução prática ao ecossistema **Kubernetes**, focado 
 * **Cesar** - [@cauemendess](https://github.com/cauemendess)
 * **Pedro Modesto** - [@phm-aguiar](https://github.com/phm-aguiar)
 
+
 ---
 
 ## 🏗️ Arquitetura e Etapas de Implementação
