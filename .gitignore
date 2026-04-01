@@ -1,0 +1,41 @@
+# =========================
+# Vagrant
+# =========================
+.vagrant/
+*.box
+
+# =========================
+# OS generated files
+# =========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# =========================
+# IDEs and Editors
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# =========================
+# Kubernetes / Segurança
+# =========================
+# Caso você exporte o kubeconfig para a pasta do projeto localmente
+kubeconfig
+config
+*.pem
+*.rsa
+*.key
+*.crt
+
+# =========================
+# Variáveis de Ambiente
+# =========================
+.env
