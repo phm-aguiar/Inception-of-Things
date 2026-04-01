@@ -7,6 +7,7 @@
 
 Este projeto é uma introdução prática ao ecossistema **Kubernetes**, focado em provisionamento de infraestrutura, orquestração de contêineres e integração contínua usando GitOps. O objetivo é evoluir desde a configuração manual de clusters com Vagrant até a automação de deploys com K3d e Argo CD.
 
+
 ---
 
 ## 👨‍💻 Equipe
