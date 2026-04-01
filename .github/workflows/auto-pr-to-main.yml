@@ -1,0 +1,34 @@
+name: Auto PR to Main
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write # Dá permissão para a Action criar o PR
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request to main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Verifica se já existe um PR aberto da develop para a main para não duplicar
+          PR_EXISTS=$(gh pr list --head develop --base main --state open --json id --jq 'length')
+          
+          if [ "$PR_EXISTS" -eq "0" ]; then
+            echo "Criando Pull Request da develop para a main..."
+            gh pr create \
+              --base main \
+              --head develop \
+              --title "🚀 Release: Atualização da main via develop" \
+              --body "Pull Request automático gerado após merge na branch \`develop\`. Futuramente, testes rodarão aqui antes da aprovação."
+          else
+            echo "Já existe um PR aberto da develop para a main. Ignorando criação..."
+          fi

@@ -1,0 +1,37 @@
+name: Auto PR Feature to Develop
+
+on:
+  push:
+    branches:
+      - 'feature/**' # O asterisco duplo pega qualquer coisa depois da barra
+
+jobs:
+  create-feature-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write 
+      contents: read
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Criar Pull Request para a develop
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Pega o nome da branch atual que você acabou de dar push
+          BRANCH_NAME="${{ github.ref_name }}"
+          
+          # Verifica se já existe um PR aberto dessa branch para a develop (para não duplicar se você der mais de um push na mesma branch)
+          PR_EXISTS=$(gh pr list --head "$BRANCH_NAME" --base develop --state open --json id --jq 'length')
+          
+          if [ "$PR_EXISTS" -eq "0" ]; then
+            echo "Criando PR automático de $BRANCH_NAME para develop..."
+            gh pr create \
+              --base develop \
+              --head "$BRANCH_NAME" \
+              --title "✨ Nova Feature: $BRANCH_NAME" \
+              --body "PR criado automaticamente pela Action anti-sedentarismo 🤖. Por favor, revise as alterações antes de aprovar o merge para a \`develop\`."
+          else
+            echo "Já existe um PR aberto para essa branch. Os novos commits foram adicionados a ele automaticamente!"
+          fi

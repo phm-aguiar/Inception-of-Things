@@ -1,0 +1,29 @@
+name: Enforce Branch Flow
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  check-flow:
+    runs-on: ubuntu-latest
+    steps:
+      # Regra 1: Bloqueia PRs para a main que não venham da develop
+      - name: Verificar fluxo para a main
+        if: github.base_ref == 'main' && github.head_ref != 'develop'
+        run: |
+          echo "🚨 ERRO BLOQUEADOR 🚨"
+          echo "PRs para a 'main' SÓ podem vir da branch 'develop'."
+          echo "Sua branch de origem é '${{ github.head_ref }}'."
+          exit 1
+
+      # Regra 2: Bloqueia PRs para a develop que não comecem com feature/
+      - name: Verificar fluxo para a develop
+        if: github.base_ref == 'develop' && !startsWith(github.head_ref, 'feature/')
+        run: |
+          echo "🚨 ERRO BLOQUEADOR 🚨"
+          echo "PRs para a 'develop' SÓ podem vir de branches com o prefixo 'feature/' (ex: feature/ajustes)."
+          echo "Sua branch de origem é '${{ github.head_ref }}'."
+          exit 1

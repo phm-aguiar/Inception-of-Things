@@ -1,0 +1,29 @@
+name: Auto Tag on Main Merge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tag-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Permissão necessária para criar a tag no repositório
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Essencial: baixa o histórico completo para a Action conseguir ler as tags antigas
+
+      - name: Gerar Tag Automática
+        id: tagger
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch # Por padrão, incrementa o último número (ex: de v0.0.1 para v0.0.2)
+          release_branches: main
+
+      - name: Resumo da Tag
+        run: |
+          echo "✅ Nova tag gerada com sucesso: ${{ steps.tagger.outputs.new_tag }}"
