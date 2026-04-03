@@ -13,4 +13,4 @@ mkdir -p /home/vagrant/.kube
 sudo cp /etc/rancher/k3s/k3s.yaml /home/vagrant/.kube/config
 sudo chown vagrant:vagrant /home/vagrant/.kube/config
 echo 'export KUBECONFIG=/home/vagrant/.kube/config' >> /home/vagrant/.bashrc
-
+echo 'export PATH=$PATH:/sbin' >> /home/vagrant/.bashrc
