@@ -1,0 +1,28 @@
+# FOR DEBIAN 13
+
+# atualiza o sistema
+sudo apt update && sudo apt upgrade -y
+
+# openssh
+sudo apt install -y openssh-server
+
+# dependências gerais
+sudo apt install -y curl wget git vim
+
+# VirtualBox 7.1
+wget -O /tmp/oracle_vbox.asc https://www.virtualbox.org/download/oracle_vbox_2016.asc
+sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox.gpg /tmp/oracle_vbox.asc
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox.gpg] https://download.virtualbox.org/virtualbox/debian trixie contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
+sudo apt update
+sudo apt install -y virtualbox-7.1
+
+# Vagrant 2.4.9
+wget https://releases.hashicorp.com/vagrant/2.4.9/vagrant_2.4.9-1_amd64.deb
+sudo dpkg -i vagrant_2.4.9-1_amd64.deb
+
+# adiciona usuário ao grupo vboxusers
+sudo usermod -aG vboxusers $USER
+
+virtualbox --version
+vagrant --version
+ssh -V
