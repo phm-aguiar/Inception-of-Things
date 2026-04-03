@@ -12,7 +12,7 @@ Este projeto é uma introdução prática ao ecossistema **Kubernetes**, focado 
 ## 👨‍💻 Equipe
 
 * **Mateus** - [@Matesant](https://github.com/Matesant)
-* **Cesar** - [@cauemendess](https://github.com/cauemendess)
+* **Cauê** - [@cauemendess](https://github.com/cauemendess)
 * **Pedro Modesto** - [@phm-aguiar](https://github.com/phm-aguiar)
 
 
