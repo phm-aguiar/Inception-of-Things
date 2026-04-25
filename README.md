@@ -7,6 +7,7 @@
 
 Este projeto é uma introdução prática ao ecossistema **Kubernetes**, focado em provisionamento de infraestrutura, orquestração de contêineres e integração contínua usando GitOps. O objetivo é evoluir desde a configuração manual de clusters com Vagrant até a automação de deploys com K3d e Argo CD.
 
+
 ---
 
 ## 👨‍💻 Equipe
@@ -56,6 +57,10 @@ flowchart TD
 
 ```
 .
+├── doc/            # Documentacao (getting started, testes e arquitetura)
+│   ├── GETTING_STARTED.md
+│   ├── COMO_TESTAR.md
+│   └── COMO_FUNCIONA.md
 ├── p1/             # Setup de Server e Worker K3s com Vagrant
 │   ├── confs/
 │   ├── scripts/
@@ -68,3 +73,65 @@ flowchart TD
     ├── confs/
     └── scripts/
 ```
+
+## 📚 Documentação
+
+- [Getting Started](doc/GETTING_STARTED.md)
+- [Como Testar](doc/COMO_TESTAR.md)
+- [Como Tudo Funciona](doc/COMO_FUNCIONA.md)
+
+## ⚡ Demo Rápida (5 min)
+
+Sequencia curta para demonstrar os pontos principais do projeto.
+
+### 1) p1: cluster com 2 nos (server + worker)
+
+```bash
+cd p1
+vagrant up
+vagrant ssh phenriq2S
+kubectl get nodes -o wide
+```
+
+Resultado esperado:
+- dois nos em Ready
+- IPs privados 192.168.56.110 e 192.168.56.111
+
+### 2) p2: ingress com roteamento por host
+
+```bash
+cd ../p2
+vagrant up
+vagrant ssh phenriq2S
+kubectl get deploy app2
+kubectl get ingress ingress-cool
+```
+
+Teste rapido de rotas:
+
+```bash
+curl -H "Host: app1.com" http://192.168.56.110
+curl -H "Host: app2.com" http://192.168.56.110
+curl http://192.168.56.110
+```
+
+Resultado esperado:
+- app2 com 3 replicas
+- app1.com vai para app1
+- app2.com vai para app2
+- sem host vai para app3
+
+### 3) p3: GitOps com Argo CD
+
+```bash
+cd ../p3/scripts
+./setup.sh
+./test.sh
+kubectl get applications -n argocd
+kubectl get deploy -n dev -o jsonpath='{..image}'
+```
+
+Resultado esperado:
+- namespaces argocd e dev presentes
+- Argo CD em execucao
+- deployment em dev com imagem tag v1 ou v2
