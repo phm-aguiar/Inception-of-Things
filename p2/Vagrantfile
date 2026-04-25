@@ -1,17 +1,41 @@
+unless Vagrant.has_plugin?("vagrant-vbguest")
+  installed = system("vagrant plugin install vagrant-vbguest")
+  warn("Could not auto-install plugin vagrant-vbguest. Install manually if needed.") unless installed
+end
+
+class NodeConfig
+  attr_reader :name, :ip, :provision_script
+
+  def initialize(name:, ip:, provision_script:)
+    @name = name
+    @ip = ip
+    @provision_script = provision_script
+  end
+end
+
+NODES = [
+  NodeConfig.new(name: "phenriq2S", ip: "192.168.56.110", provision_script: "scripts/server.sh")
+].freeze
+
 Vagrant.configure("2") do |config|
+  ENV["VAGRANT_DEFAULT_PROVIDER"] = "virtualbox"
+
   config.vm.box = "cdsn/debian13"
   config.vm.box_version = "1.0.1"
   config.vm.boot_timeout = 600
-  ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
 
-  config.vm.define "matesantS" do |server|
-    server.vm.hostname = "matesantS"
-    server.vm.network "private_network", ip: "192.168.56.110"
-    server.vm.synced_folder "./confs", "/vagrant", disabled: false
-    server.vm.provider "virtualbox" do |v|
-      v.memory = 2048
-      v.cpus = 2
+  NODES.each do |node|
+    config.vm.define node.name do |machine|
+      machine.vm.hostname = node.name
+      machine.vm.network "private_network", ip: node.ip
+      machine.vm.synced_folder "./confs", "/vagrant", disabled: false
+
+      machine.vm.provider "virtualbox" do |v|
+        v.memory = 2048
+        v.cpus = 2
+      end
+
+      machine.vm.provision "shell", path: node.provision_script
     end
-    server.vm.provision "shell", path: "scripts/server.sh"
   end
 end

@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: iot-project
+  namespace: argocd
+spec:
+  description: Inception of Things project
+  sourceRepos:
+  - https://github.com/phm-aguiar/Inception-of-Things
+  destinations:
+  - namespace: dev
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  namespaceResourceWhitelist:
+  - group: '*'
+    kind: '*'
